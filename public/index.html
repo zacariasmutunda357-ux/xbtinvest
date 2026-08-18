@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>XBT Wealth Angola</title>
+<title>XBT Wealth</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -442,7 +442,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Inter',sans-serif;
         <div class="sub-body">
           <div style="background:linear-gradient(135deg,#CC0000,#8B0000);border-radius:16px;padding:20px;text-align:center;margin-bottom:12px;">
             <img class="xbt-logo" style="width:80px;height:80px;object-fit:cover;border-radius:50%;margin-bottom:10px;pointer-events:none;">
-            <div style="font-size:20px;font-weight:900;color:#fff;">XBT Wealth Angola</div>
+            <div style="font-size:20px;font-weight:900;color:#fff;">XBT Wealth</div>
             <div style="font-size:12px;color:rgba(255,255,255,.8);margin-top:3px;font-style:italic;">Investe Hoje, Constróis o Teu Amanhã</div>
           </div>
           <div class="wcard">
@@ -916,7 +916,7 @@ function planCard(p){
   var dis=p.inativo;
   return '<div class="plan-card" style="'+(dis?'opacity:.5':'')+'"><div class="pc-hdr" style="background:'+p.cor+';" onclick="'+(dis?'':'')+'">'
     +'<div style="display:flex;align-items:center;gap:10px;"><div style="width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.2);display:flex;align-items:center;justify-content:center;font-size:14px;">🏦</div>'
-    +'<div><div class="pc-n">'+p.n+'</div><div class="pc-ns">'+(dis?'DESACTIVADO':'Investimento XTB Angola')+'</div></div></div>'
+    +'<div><div class="pc-n">'+p.n+'</div><div class="pc-ns">'+(dis?'DESACTIVADO':'Investimento XTB ')+'</div></div></div>'
     +'<div style="font-size:14px;font-weight:900;color:#fff;">'+fmtKZ(p.p)+'</div></div>'
     +'<div class="pc-body">'
     +'<div class="pc-row"><span class="chk">✅</span><span>Duração: <b>'+p.dur+' dias</b></span></div>'
@@ -987,14 +987,14 @@ function pagarComissoes(valor){
 }
 
 function rAgente(){
-  if(!U)return;var link='https://xtb-invest.ao/reg?ref='+U.codigo;
+  if(!U)return;var link='https://xtb-invest.org/reg?ref='+U.codigo;
   var aci=G('ag-cod-inp'),ali=G('ag-link-inp');if(aci)aci.value=U.codigo;if(ali)ali.value=link;se('ag-tot',U.equipa.length);
   var agm=G('ag-mbs');if(!agm)return;agm.innerHTML=U.equipa.length?U.equipa.map(function(m){
     return '<div style="background:#fff;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:8px;box-shadow:0 1px 4px rgba(0,0,0,.05);"><div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#CC0000,#FF4444);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;">'+m.nome.charAt(0)+'</div><div><div style="font-size:13px;font-weight:600;color:#111;">'+m.nome+'</div><div style="font-size:11px;color:#999;margin-top:2px;">'+m.tel+'</div></div></div>';
   }).join(''):'<div style="text-align:center;padding:20px;color:#999;font-size:13px;">Sem membros ainda</div>';
 }
-function partilharWA(){if(!U)return;window.open('https://wa.me/?text='+encodeURIComponent('🏦 *XTB Invest Angola*\n🔗 https://xtb-invest.ao/reg?ref='+U.codigo+'\n🎫 Código: '+U.codigo));}
-function partilharNativo(){if(!U)return;var link='https://xtb-invest.ao/reg?ref='+U.codigo;if(navigator.share)navigator.share({title:'XTB Invest',url:link}).catch(function(){cpTxt(link);toast('Link copiado!','ok');});else{cpTxt(link);toast('Link copiado!','ok');}}
+function partilharWA(){if(!U)return;window.open('https://wa.me/?text='+encodeURIComponent('🏦 *XTB Invest Angola*\n🔗 https://xtb-invest.org/reg?ref='+U.codigo+'\n🎫 Código: '+U.codigo));}
+function partilharNativo(){if(!U)return;var link='https://xtb-invest.org/reg?ref='+U.codigo;if(navigator.share)navigator.share({title:'XTB Invest',url:link}).catch(function(){cpTxt(link);toast('Link copiado!','ok');});else{cpTxt(link);toast('Link copiado!','ok');}}
 
 // TAREFAS
 function getPlanoActivo(){if(!U||!U.nivel||U.planos===0)return null;return PLANOS.find(function(p){return p.n===U.nivel;})||null;}
