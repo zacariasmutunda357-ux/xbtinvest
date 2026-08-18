@@ -987,14 +987,14 @@ function pagarComissoes(valor){
 }
 
 function rAgente(){
-  if(!U)return;var link='https://xtb-invest.org/reg?ref='+U.codigo;
+  if(!U)return;var link='https://xtbinvest.org/reg?ref='+U.codigo;
   var aci=G('ag-cod-inp'),ali=G('ag-link-inp');if(aci)aci.value=U.codigo;if(ali)ali.value=link;se('ag-tot',U.equipa.length);
   var agm=G('ag-mbs');if(!agm)return;agm.innerHTML=U.equipa.length?U.equipa.map(function(m){
     return '<div style="background:#fff;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:8px;box-shadow:0 1px 4px rgba(0,0,0,.05);"><div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#CC0000,#FF4444);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;">'+m.nome.charAt(0)+'</div><div><div style="font-size:13px;font-weight:600;color:#111;">'+m.nome+'</div><div style="font-size:11px;color:#999;margin-top:2px;">'+m.tel+'</div></div></div>';
   }).join(''):'<div style="text-align:center;padding:20px;color:#999;font-size:13px;">Sem membros ainda</div>';
 }
-function partilharWA(){if(!U)return;window.open('https://wa.me/?text='+encodeURIComponent('🏦 *XTB Invest Angola*\n🔗 https://xtb-invest.org/reg?ref='+U.codigo+'\n🎫 Código: '+U.codigo));}
-function partilharNativo(){if(!U)return;var link='https://xtb-invest.org/reg?ref='+U.codigo;if(navigator.share)navigator.share({title:'XTB Invest',url:link}).catch(function(){cpTxt(link);toast('Link copiado!','ok');});else{cpTxt(link);toast('Link copiado!','ok');}}
+function partilharWA(){if(!U)return;window.open('https://wa.me/?text='+encodeURIComponent('🏦 *XTB Invest Angola*\n🔗 https://xtbinvest.org/reg?ref='+U.codigo+'\n🎫 Código: '+U.codigo));}
+function partilharNativo(){if(!U)return;var link='https://xtbinvest.org/reg?ref='+U.codigo;if(navigator.share)navigator.share({title:'XTB Invest',url:link}).catch(function(){cpTxt(link);toast('Link copiado!','ok');});else{cpTxt(link);toast('Link copiado!','ok');}}
 
 // TAREFAS
 function getPlanoActivo(){if(!U||!U.nivel||U.planos===0)return null;return PLANOS.find(function(p){return p.n===U.nivel;})||null;}
