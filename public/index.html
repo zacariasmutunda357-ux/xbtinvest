@@ -1485,7 +1485,7 @@ function swTab(tab) {
   var refCode = urlParams.get('ref') || urlParams.get('c') || urlParams.get('convite');
 
   if (refCode) {
-    var refInput = document.getElementById('reg_ref') || document.querySelector('input[placeholder*="convite" i]');
+    var refInput = document.getElementById('reg_ref') || document.querySelector('input[placeholder*="XTB" i]') || document.querySelector('input[placeholder*="2024" i]');
     if (refInput) {
       refInput.value = refCode;
       refInput.readOnly = true;
