@@ -213,12 +213,12 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Inter',sans-serif;
   </div>
   <div style="width:100%;max-width:370px;position:relative;z-index:1;">
     <div class="tab-sw"><button class="on" id="tl" onclick="swTab('l')">Entrar</button><button id="tr" onclick="swTab('r')">Registar</button></div>
-    <div id="fl">
-      <div class="fi fi-dark"><label>Telefone</label><input type="tel" id="l-tel" placeholder="9xx xxx xxx"></div>
-      <div class="fi fi-dark"><label>Senha</label><input type="password" id="l-pw" placeholder="••••••"></div>
-      <button class="btn-r" onclick="doLogin()">Entrar na Conta</button>
+    <form id="fl" onsubmit="event.preventDefault(); doLogin();">
+      <div class="fi fi-dark"><label>Telefone</label><input type="tel" autocomplete="username"="tel" id="l-tel" placeholder="9xx xxx xxx"></div>
+      <div class="fi fi-dark"><label>Senha</label><input type="password" autocomplete="current-password="password" id="l-pw" placeholder="••••••"></div>
+      <button type="submit" class="btn-r" onclick="doLogin()">Entrar na Conta</button>
       <div class="lg-link">Não tem conta? <button onclick="swTab('r')">Criar conta grátis →</button></div>
-    </div>
+    </form>
     <div id="fr" style="display:none">
       <div class="fi fi-dark"><label>Nome Completo</label><input type="text" id="r-n" placeholder="Nome completo"></div>
       <div class="fi fi-dark"><label>Telefone</label><input type="tel" id="r-t" placeholder="9xx xxx xxx"></div>
