@@ -1473,6 +1473,7 @@ function swTab(tab) {
     if (fr) fr.style.display = 'block';
     if (tl) tl.classList.remove('on');
     if (tr) tr.classList.add('on');
+    if (typeof gerarCaptcha === 'function') gerarCaptcha(); // Gera o CAPTCHA ao abrir o registo
   } else {
     if (fl) fl.style.display = 'block';
     if (fr) fr.style.display = 'none';
@@ -1480,7 +1481,8 @@ function swTab(tab) {
     if (tl) tl.classList.add('on');
   }
 }
-  window.addEventListener('DOMContentLoaded', function() {
+
+window.addEventListener('DOMContentLoaded', function() {
   var urlParams = new URLSearchParams(window.location.search);
   var refCode = urlParams.get('ref') || urlParams.get('c') || urlParams.get('convite');
 
@@ -1493,6 +1495,11 @@ function swTab(tab) {
     if (typeof swTab === 'function') {
       swTab('r');
     }
+  }
+
+  // Garante que o CAPTCHA seja gerado na inicialização da página
+  if (typeof gerarCaptcha === 'function') {
+    gerarCaptcha();
   }
 });
 </script>
