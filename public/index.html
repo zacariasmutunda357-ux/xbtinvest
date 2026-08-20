@@ -1459,9 +1459,27 @@ function verificarRendaDisponivel(){
 }
 
 logA('Plataforma iniciada');gerarCaptcha();iniciarSlide();
-const SUPABASE_URL='https://yhdncwhnxfmglkhuiuao.supabase.co
-const SUPABASE_KEY='sb_publishable_wwOfp1ToqqHy1VphxNpTow_NTlTkPgJ
+const SUPABASE_URL='https://yhdncwhnxfmglkhuiuao.supabase.co';
+const SUPABASE_KEY='sb_publishable_wwOfp1ToqqHy1VphxNpTow_NT1TkPgJ';
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+function swTab(tab) {
+  var fl = document.getElementById('fl');
+  var fr = document.getElementById('fr');
+  var tl = document.getElementById('tl');
+  var tr = document.getElementById('tr');
+  if (tab === 'r') {
+    if (fl) fl.style.display = 'none';
+    if (fr) fr.style.display = 'block';
+    if (tl) tl.classList.remove('on');
+    if (tr) tr.classList.add('on');
+  } else {
+    if (fl) fl.style.display = 'block';
+    if (fr) fr.style.display = 'none';
+    if (tr) tr.classList.remove('on');
+    if (tl) tl.classList.add('on');
+  }
+}
 </script>
 </body>
 </html>
