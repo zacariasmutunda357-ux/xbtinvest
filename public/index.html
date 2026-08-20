@@ -1480,6 +1480,21 @@ function swTab(tab) {
     if (tl) tl.classList.add('on');
   }
 }
+  window.addEventListener('DOMContentLoaded', function() {
+  var urlParams = new URLSearchParams(window.location.search);
+  var refCode = urlParams.get('ref') || urlParams.get('c') || urlParams.get('convite');
+
+  if (refCode) {
+    var refInput = document.getElementById('reg_ref') || document.querySelector('input[placeholder*="convite" i]');
+    if (refInput) {
+      refInput.value = refCode;
+      refInput.readOnly = true;
+    }
+    if (typeof swTab === 'function') {
+      swTab('r');
+    }
+  }
+});
 </script>
 </body>
 </html>
