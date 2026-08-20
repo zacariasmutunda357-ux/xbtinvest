@@ -212,22 +212,23 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Inter',sans-serif;
     <p>Investe Hoje, Constrói o Teu Amanhã</p>
   </div>
   <div style="width:100%;max-width:370px;position:relative;z-index:1;">
-    <div class="tab-sw"><button class="on" id="tl" onclick="swTab('l')">Entrar</button><button id="tr" onclick="swTab('r')">Registar</button></div>
-    <div id="fl">
-      <div class="fi fi-dark"><label>Telefone</label><input type="tel" id="l-tel" name="username" autocomplete="username" placeholder="Telefone"></div>
-     <div class="fi fi-dark"><label>Senha</label><input type="password" id="l-pw" name="password" autocomplete="current-password" placeholder="Senha"></div>
-       <button class="btn-r" onclick="doLogin()">Entrar na Conta</button>
-       <div class="lg-link">Não tem conta? <button onclick="swTab('r')">Criar conta grátis →</button></div>
-    </div>
-    <div id="fr" style="display:none">
-      <div class="fi fi-dark"><label>Nome Completo</label><input type="text" id="r-n" placeholder="Nome completo"></div>
-      <div class="fi fi-dark"><label>Telefone</label><input type="tel" id="r-t" placeholder="9xx xxx xxx"></div>
-      <div class="fi fi-dark"><label>Senha</label><input type="password" id="r-p" placeholder="Mínimo 6 caracteres"></div>
-      <div class="fi fi-dark"><label>Código de Convite (opcional)</label><input type="text" id="r-c" placeholder="Ex: XTB-2024"></div>
-      <div class="fi fi-dark" id="captcha-wrap">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;"><label style="font-size:11px;font-weight:600;color:rgba(255,255,255,.5);letter-spacing:.5px;text-transform:uppercase;">Verificação de Segurança</label><button onclick="gerarCaptcha()" type="button" style="background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:12px;">🔄 Novo código</button></div>
-        <div id="captcha-q" style="margin-bottom:6px;"></div>
-        <input type="text" id="captcha-ans" placeholder="Escreva o código acima" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:9px 14px;color:#fff;font-family:Inter,sans-serif;font-size:15px;font-weight:700;text-align:center;letter-spacing:4px;text-transform:uppercase;width:100%;outline:none;">
+  <div class="tab-sw">
+    <button class="on" id="tl" onclick="swTab('l')">Entrar</button>
+    <button id="tr" onclick="swTab('r')">Registar</button>
+  </div>
+  <div id="fl">
+    <div class="fi fi-dark"><label>Telefone</label><input type="tel" id="l-tel" name="username" autocomplete="username" placeholder="Telefone"></div>
+    <div class="fi fi-dark"><label>Senha</label><input type="password" id="l-pw" name="password" autocomplete="current-password" placeholder="Senha"></div>
+    <button class="btn-r" onclick="doLogin()">Entrar na Conta</button>
+    <div class="lg-link">Não tem conta? <button onclick="swTab('r')">Criar conta grátis →</button></div>
+  </div>
+  <div id="fr" style="display:none">
+    <div class="fi fi-dark"><label>Nome Completo</label><input type="text" id="r-n" placeholder="Nome completo"></div>
+    <div class="fi fi-dark"><label>Telefone</label><input type="tel" id="r-t" placeholder="9xx xxx xxx"></div>
+    <div class="fi fi-dark"><label>Senha</label><input type="password" id="r-p" placeholder="Mínimo 6 caracteres"></div>
+    <div class="fi fi-dark"><label>Código de Convite (opcional)</label><input type="text" id="r-c" placeholder="Ex: XTB-2024"></div>
+    <div id="captcha-wrap" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+      <input type="text" id="captcha-ans" placeholder="Escreva o código acima" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:9px 14px;color:#fff;font-family:Inter,sans-serif;font-size:15px;font-weight:700;text-align:center;letter-spacing:4px;text-transform:uppercase;width:100%;outline:none;">
       </div>
       <button class="btn-r" onclick="doReg()">Criar Conta</button>
       <div class="lg-link">Já tem conta? <button onclick="swTab('l')">Entrar →</button></div>
