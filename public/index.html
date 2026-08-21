@@ -827,12 +827,6 @@ function doLogin() {
 
 async function doReg() {
     try {
-        // Garantir array global seguro
-        if (typeof window.USERS === 'undefined' || !Array.isArray(window.USERS)) {
-            window.USERS = [];
-        }
-        var listaUsuarios = window.USERS;
-
         var rn = G('r-n'), rt = G('r-t'), rp = G('r-p'), rc = G('r-c'), ca = G('captcha-ans');
         var n = (rn && rn.value) ? rn.value.trim() : '';
         var t = (rt && rt.value) ? rt.value.trim() : '';
@@ -840,34 +834,16 @@ async function doReg() {
         var c = (rc && rc.value) ? rc.value.trim() : '';
         var ans = (ca && ca.value) ? ca.value.trim().toUpperCase() : '';
 
-        if (!n || !t || !p) {
-            toast('Preencha os campos obrigatórios', 'err');
-            return;
+        if (!n || !t || !p) { toast('Preencha os campos obrigatórios', 'err'); return; }
+        if (t.length < 9) { toast('Telefone inválido (mínimo 9 dígitos)', 'err'); return; }
+
+        if (typeof _capCode !== 'undefined' && _capCode && ans !== String(_capCode).toUpperCase()) {
+            toast('Código Captcha incorreto', 'err'); return;
         }
 
-        if (t.length < 9) {
-            toast('Telefone inválido (mínimo 9 dígitos)', 'err');
-            return;
-        }
-
-        if (typeof _capCode !== 'undefined' && _capCode) {
-            if (ans !== String(_capCode).toUpperCase()) {
-                toast('Código Captcha incorreto', 'err');
-                return;
-            }
-        }
-
-        var existe = listaUsuarios.find(function(x) { return x && x.tel === t; });
-        if (existe) {
-            toast('Este número já tem conta', 'err');
-            return;
-        }
-
-        var novoId = listaUsuarios.length + 1;
         var meuCodigo = 'XTB-' + Math.floor(100000 + Math.random() * 900000);
 
         var novo = {
-            id: novoId,
             nome: n,
             tel: t,
             pw: p,
@@ -878,22 +854,28 @@ async function doReg() {
             codigo: meuCodigo
         };
 
-        listaUsuarios.push(novo);
+        // Envio direto apontando para a tabela 'Usuários' do seu Supabase
+        if (typeof _supabase !== 'undefined' && _supabase && typeof _supabase.from === 'function') {
+            var res = await _supabase.from('Usuários').insert([novo]);
+            if (res.error) {
+                alert('Erro ao gravar no Supabase: ' + res.error.message);
+                return;
+            }
+        } else {
+            alert('Erro: Supabase não está inicializado no HTML do site.');
+            return;
+        }
+
+        if (!Array.isArray(window.USERS)) window.USERS = [];
+        window.USERS.push(novo);
         window.U = novo;
 
-        try {
-            if (typeof _supabase !== 'undefined' && _supabase && typeof _supabase.from === 'function') {
-                _supabase.from('users').insert([novo]).then(function(){}).catch(function(){});
-            }
-        } catch(e) {}
-
-        if (typeof salvarDados === 'function') { try { salvarDados(); } catch(e1) {} }
-        if (typeof showApp === 'function') { try { showApp(); } catch(e2) {} }
-
+        if (typeof salvarDados === 'function') salvarDados();
+        if (typeof showApp === 'function') showApp();
         toast('Conta criada com sucesso!', 'ok');
 
     } catch (err) {
-        alert('Erro ao criar conta: ' + (err ? err.message : 'Falha no registo'));
+        alert('Erro ao criar conta: ' + (err ? err.message : 'Falha no servidor'));
     }
 }
 
