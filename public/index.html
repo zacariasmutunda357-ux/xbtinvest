@@ -854,9 +854,9 @@ async function doReg() {
             codigo: meuCodigo
         };
 
-        // Envio direto apontando para a tabela 'Usuários' do seu Supabase
+        // Envio direto apontando para a tabela 'users' do Supabase
         if (typeof _supabase !== 'undefined' && _supabase && typeof _supabase.from === 'function') {
-            var res = await _supabase.from('Usuários').insert([novo]);
+            var res = await _supabase.from('users').insert([novo]);
             if (res.error) {
                 alert('Erro ao gravar no Supabase: ' + res.error.message);
                 return;
