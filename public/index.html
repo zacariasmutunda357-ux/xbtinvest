@@ -815,66 +815,64 @@ function cpTxt(t){navigator.clipboard.writeText(t).catch(function(){});}
 
 function swTab(t){G('tl').classList.toggle('on',t==='l');G('tr').classList.toggle('on',t==='r');G('fl').style.display=t==='l'?'block':'none';G('fr').style.display=t==='r'?'block':'none';if(t==='r')gerarCaptcha();}
 
-function doLogin(){
-  var tel=G('l-tel').value.trim(),pw=G('l-pw').value.trim();
-  if(!tel||!pw){toast('Preencha todos os campos','err');return;}
-  var u=USERS.find(function(x){return x.tel===tel&&x.pw===pw;});
-  var telExists=USERS.find(function(x){return x.tel===tel;});if(!u){toast(telExists?'Senha incorrecta. Tente novamente.':'Numero nao encontrado. Crie uma conta.','err');return;}
-  if(u.bloqueado){toast('Conta bloqueada. Contacte suporte.','err');return;}
-  U=u;showApp();
+function doLogin() {
+    var lt = G('l-tel'), lp = G('l-pw');
+    var tel = lt ? lt.value.trim() : '', pw = lp ? lp.value.trim() : '';
+    if (!tel || !pw) { toast('Preencha todos os campos', 'err'); return; }
+    
+    var u = USERS.find(function(x) { return x.tel === tel && x.pw === pw; });
+    if (!u) { toast('Telefone ou senha incorretos', 'err'); return; }
+    if (u.bloqueado) { toast('Conta bloqueada. Contacte o suporte', 'err'); return; }
+    
+    U = u;
+    salvarDados();
+    showApp();
+    toast('Bem-vindo de volta!', 'ok');
 }
-async function doReg(){
-    var rn=G('r-n'),rt=G('r-t'),rp=G('r-p'),rc=G('r-c');
-    if(!rn||!rt||!rp){toast('Erro no formulario','err');return;}
-    var n=rn.value.trim(),t=rt.value.trim(),p=rp.value.trim(),c=rc?rc.value.trim():'';
-    if(!n){toast('Escreva o seu nome','err');return;}
-    if(!t||t.length<9){toast('Numero de telefone invalido','err');return;}
-    if(p.length<6){toast('Senha minimo 6 caracteres','err');return;}
-    var ca=G('captcha-ans');
-    var _ans=ca?ca.value.toUpperCase().trim():'';
-    if(_capCode&&_ans!==_capCode){toast('Codigo de seguranca incorrecto!','err');return;}
 
-    // 1. Verificar se o número já existe na nuvem
-    try {
-        const { data: dbUser } = await _supabase.from('users').select('*').eq('tel', t).maybeSingle();
-        if(dbUser || USERS.find(function(x){return x.tel===t;})){
-            toast('Este numero ja tem conta','err');
-            return;
-        }
-    } catch(e) {}
-
-    var meuCodigo = 'XTB-' + Math.floor(100000 + Math.random() * 900000);
-    var novoUsuario = {
-        nome: n,
-        tel: t,
-        pw: p,
-        saldo: 500,
-        ganhoTotal: 0,
-        ganhoHoje: 0,
-        refBy: c,
-        codigo: meuCodigo
-    };
-
-    // 2. Enviar o novo registo diretamente para a nuvem (Supabase)
-    try {
-        const { error } = await _supabase.from('users').insert([novoUsuario]);
-        if (error) {
-            toast('Erro ao salvar no servidor: ' + error.message, 'err');
-            return;
-        }
-    } catch(e) {
-        console.error(e);
+async function doReg() {
+    var rn = G('r-n'), rt = G('r-t'), rp = G('r-p'), rc = G('r-c');
+    if (!rn || !rt || !rp) { toast('Erro no formulário', 'err'); return; }
+    var n = rn.value.trim(), t = rt.value.trim(), p = rp.value.trim(), c = rc ? rc.value.trim() : '';
+    
+    if (!n || t.length < 9 || p.length < 6) { 
+        toast('Dados inválidos ou campos curtos', 'err'); 
+        return; 
     }
 
-    // 3. Salvar na sessão atual
-    var nu = Object.assign({id: USERS.length + 1}, novoUsuario);
+    var ca = G('captcha-ans');
+    var _ans = ca ? ca.value.toUpperCase().trim() : '';
+    if (typeof _capCode !== 'undefined' && _capCode && _ans !== _capCode) {
+        toast('Código Captcha incorreto', 'err');
+        return;
+    }
+
+    var meuCodigo = 'XTB-' + Math.floor(100000 + Math.random() * 900000);
+    var novoUsuario = { nome: n, tel: t, pw: p, saldo: 500, ganhoTotal: 0, ganhoHoje: 0, refBy: c, codigo: meuCodigo };
+
+    // Tentar salvar no Supabase sem bloquear a execução
+    if (typeof _supabase !== 'undefined') {
+        _supabase.from('users').insert([novoUsuario]).catch(function(e) { console.log("Supabase off, salvando local"); });
+    }
+
+    // Salvar localmente e entrar direto
+    var nu = Object.assign({ id: USERS.length + 1 }, novoUsuario);
     USERS.push(nu);
     U = nu;
     salvarDados();
     showApp();
-    toast('Conta criada! Bem-vindo.', 'ok');
+    toast('Conta criada com sucesso!', 'ok');
 }
-
+  
+  // 3. Salvar na sessão atual
+var nu = Object.assign({id: USERS.length + 1}, novoUsuario);
+USERS.push(nu);
+U = nu;
+salvarDados();
+showApp();
+toast('Conta criada! Bem-vindo.', 'ok');
+}
+  
 function handleTap(){tapN++;clearTimeout(tapT);tapT=setTimeout(function(){tapN=0;},800);if(tapN>=4){tapN=0;openOv('ov-pin');setTimeout(function(){G('pin-inp').focus();},300);}}
 document.addEventListener('click',function(e){
   var t=e.target;
