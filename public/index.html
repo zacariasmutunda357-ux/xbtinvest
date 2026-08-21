@@ -1482,28 +1482,33 @@ function swTab(tab) {
   }
 }
 
-window.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('load', function() {
     var urlParams = new URLSearchParams(window.location.search);
     var refCode = urlParams.get('ref') || urlParams.get('c');
 
     if (refCode) {
-        var refInput = document.getElementById('reg_ref');
-        if (refInput) {
-            refInput.value = refCode;
-            refInput.readOnly = true;
-        }
+        // Tenta encontrar o campo a cada 200ms até conseguir
+        var checkInput = setInterval(function() {
+            var refInput = document.getElementById('r-c') || document.getElementById('reg_ref');
+            if (refInput) {
+                refInput.value = refCode;
+                refInput.readOnly = true;
+                clearInterval(checkInput); // Para a procura assim que preencher
+            }
+        }, 200);
+
+        // Muda para a aba de registro
         if (typeof swTab === 'function') {
             swTab('r');
         }
     }
 
-    // Solução definitiva: Espera meio segundo e gera o captcha
+    // Tenta gerar o captcha após 800ms
     setTimeout(function() {
         if (typeof gerarCaptcha === 'function') {
             gerarCaptcha();
-            console.log("Captcha carregado com sucesso");
         }
-    }, 500); 
+    }, 800);
 });
 </script>
 </body>
