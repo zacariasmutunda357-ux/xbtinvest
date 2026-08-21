@@ -825,21 +825,40 @@ function doLogin() {
     U = u; salvarDados(); showApp(); toast('Bem-vindo!', 'ok');
 }
 
-function doReg() {
-    var n = G('r-n')?.value.trim(), t = G('r-t')?.value.trim(), p = G('r-p')?.value.trim(), c = G('r-c')?.value.trim();
-    if (!n || !t || !p) { toast('Preencha os campos', 'err'); return; }
-    if (USERS.find(x => x.tel === t)) { toast('Número já registado', 'err'); return; }
+async function doReg() {
+    var rn = G('r-n'), rt = G('r-t'), rp = G('r-p'), rc = G('r-c'), ca = G('captcha-ans');
     
-    var novo = { nome: n, tel: t, pw: p, saldo: 500, refBy: c, codigo: 'XTB-' + Math.floor(Math.random() * 900000) };
+    var n = rn ? rn.value.trim() : '';
+    var t = rt ? rt.value.trim() : '';
+    var p = rp ? rp.value.trim() : '';
+    var c = rc ? rc.value.trim() : '';
+    var ans = ca ? ca.value.toUpperCase().trim() : '';
+
+    if (!n || !t || !p) { toast('Preencha os campos obrigatórios', 'err'); return; }
+    if (t.length < 9) { toast('Telefone inválido', 'err'); return; }
     
-    // Tenta salvar na nuvem mas NÃO bloqueia se falhar
-    if (typeof _supabase !== 'undefined') {
-        _supabase.from('users').insert([novo]).catch(function(e) { console.log('Nuvem offline, salvo localmente'); });
+    if (typeof _capCode !== 'undefined' && _capCode && ans !== _capCode) {
+        toast('Código Captcha incorreto', 'err'); return;
     }
-    
-    USERS.push(novo); U = novo; salvarDados(); showApp(); toast('Conta criada!', 'ok');
+
+    if (USERS.find(x => x.tel === t)) { toast('Este número já tem conta', 'err'); return; }
+
+    var novo = { 
+        nome: n, tel: t, pw: p, saldo: 500, refBy: c, 
+        codigo: 'XTB-' + Math.floor(100000 + Math.random() * 900000) 
+    };
+
+    if (typeof _supabase !== 'undefined') {
+        _supabase.from('users').insert([novo]).catch(e => console.log('Nuvem indisponível'));
+    }
+
+    USERS.push(novo); 
+    U = novo; 
+    salvarDados(); 
+    showApp(); 
+    toast('Conta criada com sucesso!', 'ok');
 }
- 
+
 function handleTap(){tapN++;clearTimeout(tapT);tapT=setTimeout(function(){tapN=0;},800);if(tapN>=4){tapN=0;openOv('ov-pin');setTimeout(function(){G('pin-inp').focus();},300);}}
 document.addEventListener('click',function(e){
   var t=e.target;
