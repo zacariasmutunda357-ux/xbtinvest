@@ -827,12 +827,18 @@ function doLogin() {
 
 async function doReg() {
     try {
+        // Garantir array global seguro
+        if (typeof window.USERS === 'undefined' || !Array.isArray(window.USERS)) {
+            window.USERS = [];
+        }
+        var listaUsuarios = window.USERS;
+
         var rn = G('r-n'), rt = G('r-t'), rp = G('r-p'), rc = G('r-c'), ca = G('captcha-ans');
-        var n = rn ? rn.value.trim() : '';
-        var t = rt ? rt.value.trim() : '';
-        var p = rp ? rp.value.trim() : '';
-        var c = rc ? rc.value.trim() : '';
-        var ans = ca ? ca.value.trim().toUpperCase() : '';
+        var n = (rn && rn.value) ? rn.value.trim() : '';
+        var t = (rt && rt.value) ? rt.value.trim() : '';
+        var p = (rp && rp.value) ? rp.value.trim() : '';
+        var c = (rc && rc.value) ? rc.value.trim() : '';
+        var ans = (ca && ca.value) ? ca.value.trim().toUpperCase() : '';
 
         if (!n || !t || !p) {
             toast('Preencha os campos obrigatórios', 'err');
@@ -844,7 +850,6 @@ async function doReg() {
             return;
         }
 
-        // Validação de Captcha
         if (typeof _capCode !== 'undefined' && _capCode) {
             if (ans !== String(_capCode).toUpperCase()) {
                 toast('Código Captcha incorreto', 'err');
@@ -852,13 +857,6 @@ async function doReg() {
             }
         }
 
-        // Garantir que a lista de utilizadores existe
-        if (typeof window.USERS === 'undefined' || !Array.isArray(window.USERS)) {
-            window.USERS = [];
-        }
-        var listaUsuarios = window.USERS;
-
-        // Verificar se número já existe
         var existe = listaUsuarios.find(function(x) { return x && x.tel === t; });
         if (existe) {
             toast('Este número já tem conta', 'err');
@@ -880,24 +878,25 @@ async function doReg() {
             codigo: meuCodigo
         };
 
-        // Guardar no Supabase em segundo plano
+        listaUsuarios.push(novo);
+        window.U = novo;
+
         try {
-            if (typeof _supabase !== 'undefined' && _supabase && _supabase.from) {
+            if (typeof _supabase !== 'undefined' && _supabase && typeof _supabase.from === 'function') {
                 _supabase.from('users').insert([novo]).then(function(){}).catch(function(){});
             }
         } catch(e) {}
 
-        listaUsuarios.push(novo);
-        window.U = novo;
+        if (typeof salvarDados === 'function') { try { salvarDados(); } catch(e1) {} }
+        if (typeof showApp === 'function') { try { showApp(); } catch(e2) {} }
 
-        if (typeof salvarDados === 'function') salvarDados();
-        if (typeof showApp === 'function') showApp();
         toast('Conta criada com sucesso!', 'ok');
 
     } catch (err) {
-        alert('Erro ao criar conta: ' + err.message);
+        alert('Erro ao criar conta: ' + (err ? err.message : 'Falha no registo'));
     }
 }
+
 
 function handleTap(){tapN++;clearTimeout(tapT);tapT=setTimeout(function(){tapN=0;},800);if(tapN>=4){tapN=0;openOv('ov-pin');setTimeout(function(){G('pin-inp').focus();},300);}}
 document.addEventListener('click',function(e){
