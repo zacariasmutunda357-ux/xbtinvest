@@ -852,19 +852,24 @@ async function doReg() {
             }
         }
 
-        // Verificar duplicados
-        if (typeof USERS !== 'undefined' && Array.isArray(USERS)) {
-            var existe = USERS.find(function(x) { return x.tel === t; });
-            if (existe) {
-                toast('Este número já tem conta', 'err');
-                return;
-            }
-        } else {
+        // Garantir que a lista de utilizadores existe
+        if (typeof window.USERS === 'undefined' || !Array.isArray(window.USERS)) {
             window.USERS = [];
         }
+        var listaUsuarios = window.USERS;
+
+        // Verificar se número já existe
+        var existe = listaUsuarios.find(function(x) { return x && x.tel === t; });
+        if (existe) {
+            toast('Este número já tem conta', 'err');
+            return;
+        }
+
+        var novoId = listaUsuarios.length + 1;
+        var meuCodigo = 'XTB-' + Math.floor(100000 + Math.random() * 900000);
 
         var novo = {
-            id: USERS.length + 1,
+            id: novoId,
             nome: n,
             tel: t,
             pw: p,
@@ -872,18 +877,18 @@ async function doReg() {
             ganhoTotal: 0,
             ganhoHoje: 0,
             refBy: c,
-            codigo: 'XTB-' + Math.floor(100000 + Math.random() * 900000)
+            codigo: meuCodigo
         };
 
-        // Salvar no Supabase em segundo plano sem bloquear a tela
+        // Guardar no Supabase em segundo plano
         try {
             if (typeof _supabase !== 'undefined' && _supabase && _supabase.from) {
                 _supabase.from('users').insert([novo]).then(function(){}).catch(function(){});
             }
         } catch(e) {}
 
-        USERS.push(novo);
-        U = novo;
+        listaUsuarios.push(novo);
+        window.U = novo;
 
         if (typeof salvarDados === 'function') salvarDados();
         if (typeof showApp === 'function') showApp();
@@ -893,7 +898,6 @@ async function doReg() {
         alert('Erro ao criar conta: ' + err.message);
     }
 }
-
 
 function handleTap(){tapN++;clearTimeout(tapT);tapT=setTimeout(function(){tapN=0;},800);if(tapN>=4){tapN=0;openOv('ov-pin');setTimeout(function(){G('pin-inp').focus();},300);}}
 document.addEventListener('click',function(e){
