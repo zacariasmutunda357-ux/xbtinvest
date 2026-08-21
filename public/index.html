@@ -825,7 +825,7 @@ function doLogin() {
     U = u; salvarDados(); showApp(); toast('Bem-vindo!', 'ok');
 }
 
-async function doReg() {
+function doReg() {
     var n = G('r-n')?.value.trim(), t = G('r-t')?.value.trim(), p = G('r-p')?.value.trim(), c = G('r-c')?.value.trim();
     if (!n || !t || !p) { toast('Preencha os campos', 'err'); return; }
     if (USERS.find(x => x.tel === t)) { toast('Número já registado', 'err'); return; }
