@@ -1502,13 +1502,20 @@ window.addEventListener('load', function() {
             swTab('r');
         }
     }
-
-    // Tenta gerar o captcha após 800ms
+    // Solução de força bruta: tentar gerar o captcha em momentos diferentes
     setTimeout(function() {
         if (typeof gerarCaptcha === 'function') {
             gerarCaptcha();
+            console.log("Tentativa 1 de carregar captcha");
         }
-    }, 800);
+    }, 1000); // 1 segundo
+
+    setTimeout(function() {
+        if (typeof gerarCaptcha === 'function') {
+            gerarCaptcha();
+            console.log("Tentativa 2 de carregar captcha (garantia)");
+        }
+    }, 2500); // 2.5 segundos (tempo extra caso o site seja lento)
 });
 </script>
 </body>
