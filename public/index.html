@@ -1453,11 +1453,12 @@ async function carregarDados(){
             const { data, error } = await _supabase.from('users').select('*');
             if (!error && data && data.length > 0) {
                 USERS = data;
+                if (typeof showApp === 'function') showApp();
+                if (typeof renderAdmin === 'function') renderAdmin();
             }
         }
     }catch(e){}
 }
-
 carregarDados();
 // ═══════════════════════════════════════
 // NOTIFICACOES PUSH (Browser Notifications API)
