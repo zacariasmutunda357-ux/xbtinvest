@@ -826,38 +826,74 @@ function doLogin() {
 }
 
 async function doReg() {
-    var rn = G('r-n'), rt = G('r-t'), rp = G('r-p'), rc = G('r-c'), ca = G('captcha-ans');
-    
-    var n = rn ? rn.value.trim() : '';
-    var t = rt ? rt.value.trim() : '';
-    var p = rp ? rp.value.trim() : '';
-    var c = rc ? rc.value.trim() : '';
-    var ans = ca ? ca.value.toUpperCase().trim() : '';
+    try {
+        var rn = G('r-n'), rt = G('r-t'), rp = G('r-p'), rc = G('r-c'), ca = G('captcha-ans');
+        var n = rn ? rn.value.trim() : '';
+        var t = rt ? rt.value.trim() : '';
+        var p = rp ? rp.value.trim() : '';
+        var c = rc ? rc.value.trim() : '';
+        var ans = ca ? ca.value.trim().toUpperCase() : '';
 
-    if (!n || !t || !p) { toast('Preencha os campos obrigatórios', 'err'); return; }
-    if (t.length < 9) { toast('Telefone inválido', 'err'); return; }
-    
-    if (typeof _capCode !== 'undefined' && _capCode && ans !== _capCode) {
-        toast('Código Captcha incorreto', 'err'); return;
+        if (!n || !t || !p) {
+            toast('Preencha os campos obrigatórios', 'err');
+            return;
+        }
+
+        if (t.length < 9) {
+            toast('Telefone inválido (mínimo 9 dígitos)', 'err');
+            return;
+        }
+
+        // Validação de Captcha
+        if (typeof _capCode !== 'undefined' && _capCode) {
+            if (ans !== String(_capCode).toUpperCase()) {
+                toast('Código Captcha incorreto', 'err');
+                return;
+            }
+        }
+
+        // Verificar duplicados
+        if (typeof USERS !== 'undefined' && Array.isArray(USERS)) {
+            var existe = USERS.find(function(x) { return x.tel === t; });
+            if (existe) {
+                toast('Este número já tem conta', 'err');
+                return;
+            }
+        } else {
+            window.USERS = [];
+        }
+
+        var novo = {
+            id: USERS.length + 1,
+            nome: n,
+            tel: t,
+            pw: p,
+            saldo: 500,
+            ganhoTotal: 0,
+            ganhoHoje: 0,
+            refBy: c,
+            codigo: 'XTB-' + Math.floor(100000 + Math.random() * 900000)
+        };
+
+        // Salvar no Supabase em segundo plano sem bloquear a tela
+        try {
+            if (typeof _supabase !== 'undefined' && _supabase && _supabase.from) {
+                _supabase.from('users').insert([novo]).then(function(){}).catch(function(){});
+            }
+        } catch(e) {}
+
+        USERS.push(novo);
+        U = novo;
+
+        if (typeof salvarDados === 'function') salvarDados();
+        if (typeof showApp === 'function') showApp();
+        toast('Conta criada com sucesso!', 'ok');
+
+    } catch (err) {
+        alert('Erro ao criar conta: ' + err.message);
     }
-
-    if (USERS.find(x => x.tel === t)) { toast('Este número já tem conta', 'err'); return; }
-
-    var novo = { 
-        nome: n, tel: t, pw: p, saldo: 500, refBy: c, 
-        codigo: 'XTB-' + Math.floor(100000 + Math.random() * 900000) 
-    };
-
-    if (typeof _supabase !== 'undefined') {
-        _supabase.from('users').insert([novo]).catch(e => console.log('Nuvem indisponível'));
-    }
-
-    USERS.push(novo); 
-    U = novo; 
-    salvarDados(); 
-    showApp(); 
-    toast('Conta criada com sucesso!', 'ok');
 }
+
 
 function handleTap(){tapN++;clearTimeout(tapT);tapT=setTimeout(function(){tapN=0;},800);if(tapN>=4){tapN=0;openOv('ov-pin');setTimeout(function(){G('pin-inp').focus();},300);}}
 document.addEventListener('click',function(e){
