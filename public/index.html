@@ -748,17 +748,11 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Inter',sans-serif;
 </div>
 
 <script>
-window.addEventListener('load', function() {
-    try {
-        const SUPABASE_URL = 'https://yhdncwhnxfmglkhuiuao.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloZG5jd2hueGZtZ2xraHVpdWFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MjQwMDMsImV4cCI6MjEwMjQwMDAwM30.etLWjkC_qEUOOni6Njh8LOZlo8V4NBFxVNyBRemv0Oc';
-        window._supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        console.log("Supabase inicializado com sucesso!");
-    } catch (e) {
-        console.error("Erro ao inicializar o Supabase:", e);
-    }
-});
+var SUPABASE_URL = 'https://yhdncwhnxfmglkhuiuao.supabase.co';
+var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloZG5jd2hueGZtZ2xraHVpdWFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MjQwMDMsImV4cCI6MjEwMjQwMDAwM30.etLWjkC_qEUOOni6Njh8LOZlo8V4NBFxVNyBRemv0Oc';
 
+var _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+window._supabase = _supabase;
 
   var _capCode='';
 function gerarCaptcha(){
@@ -1524,9 +1518,7 @@ function verificarRendaDisponivel(){
 }
 
 logA('Plataforma iniciada');gerarCaptcha();iniciarSlide();
-const SUPABASE_URL='https://yhdncwhnxfmglkhuiuao.supabase.co';
-const SUPABASE_KEY='sb_publishable_wwOfp1ToqqHy1VphxNpTow_NT1TkPgJ';
-const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 
 function swTab(tab) {
   var fl = document.getElementById('fl');
