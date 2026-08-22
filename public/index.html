@@ -1521,11 +1521,19 @@ function verificarRendaDisponivel(){
 logA('Plataforma iniciada');gerarCaptcha();iniciarSlide();
 
 
-function swTab(tab) {
-  var fl = document.getElementById('fl');
-  var fr = document.getElementById('fr');
-  var tl = document.getElementById('tl');
-  var tr = document.getElementById('tr');
+    var saved = localStorage.getItem('U');
+    if (saved) {
+      try {
+        window.U = JSON.parse(saved);
+        if (window.U && window.U.tel) {
+          showApp();
+          return;
+        }
+      } catch(e) {}
+    }
+    localStorage.removeItem('U');
+    showAuth();
+
   if (tab === 'r') {
     if (fl) fl.style.display = 'none';
     if (fr) fr.style.display = 'block';
