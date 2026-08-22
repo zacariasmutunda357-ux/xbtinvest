@@ -826,8 +826,8 @@ function swTab(t){G('tl').classList.toggle('on',t==='l');G('tr').classList.toggl
 async function doLogin(e) {
   if (e && e.preventDefault) e.preventDefault();
   
-  var telEl = document.getElementById('loginTel') || document.getElementById('regTel');
-  var pinEl = document.getElementById('loginPin') || document.getElementById('regPin');
+  var telEl = document.getElementById('l-tel') || document.getElementById('loginTel') || document.getElementById('regTel');
+  var pinEl = document.getElementById('l-pw') || document.getElementById('loginPin') || document.getElementById('regPin');
   var tel = telEl ? telEl.value.trim() : '';
   var pin = pinEl ? pinEl.value.trim() : '';
   
@@ -854,13 +854,13 @@ async function doLogin(e) {
   showApp();
 }
 
-async function doRegister(e) {
+async function doReg(e) {
   if (e && e.preventDefault) e.preventDefault();
 
-  var nomeEl = document.getElementById('regNome');
-  var telEl = document.getElementById('regTel');
-  var pinEl = document.getElementById('regPin');
-  var refEl = document.getElementById('regRef');
+  var nomeEl = document.getElementById('r-n') || document.getElementById('regNome');
+  var telEl = document.getElementById('r-t') || document.getElementById('regTel');
+  var pinEl = document.getElementById('r-p') || document.getElementById('regPin');
+  var refEl = document.getElementById('r-c') || document.getElementById('regRef');
 
   var nome = nomeEl ? nomeEl.value.trim() : '';
   var tel = telEl ? telEl.value.trim() : '';
@@ -888,6 +888,9 @@ async function doRegister(e) {
 
   showApp();
 }
+
+var doRegister = doReg;
+
 
 
 function showApp() {
@@ -1594,18 +1597,18 @@ logA('Plataforma iniciada');gerarCaptcha();iniciarSlide();
     showAuth();
 
   if (tab === 'r') {
-    if (fl) fl.style.display = 'none';
-    if (fr) fr.style.display = 'block';
-    if (tl) tl.classList.remove('on');
-    if (tr) tr.classList.add('on');
-    if (typeof gerarCaptcha === 'function') gerarCaptcha(); // Gera o CAPTCHA ao abrir o registo
-  } else {
-    if (fl) fl.style.display = 'block';
-    if (fr) fr.style.display = 'none';
-    if (tr) tr.classList.remove('on');
-    if (tl) tl.classList.add('on');
-  }
+  if (fl) fl.style.display = 'none';
+  if (fr) fr.style.display = 'block';
+  if (tl) tl.classList.remove('on');
+  if (tr) tr.classList.add('on');
+  if (typeof gerarCaptcha === 'function') gararCaptcha(); 
+} else {
+  if (fl) fl.style.display = 'block';
+  if (fr) fr.style.display = 'none';
+  if (tr) tr.classList.remove('on');
+  if (tl) tl.classList.add('on');
 }
+
 
 window.addEventListener('load', function() {
     var urlParams = new URLSearchParams(window.location.search);
