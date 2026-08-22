@@ -851,16 +851,17 @@ async function doReg() {
 
         var meuCodigo = 'XTB-' + Math.floor(100000 + Math.random() * 900000);
 
-        var novo = {
-            nome: n,
-            tel: t,
-            pw: p,
-            saldo: 500,
-            ganhoTotal: 0,
-            ganhoHoje: 0,
-            refBy: c,
-            codigo: meuCodigo
-        };
+            var novo = {
+      nome: n,
+      tel: t,
+      pw: p,
+      saldo: 500,
+      ganhoTotal: 0,
+      ganhoHoje: 0,
+      planes: [],
+      refBy: c,
+      codigo: meuCodigo
+    };
 
         // Envio direto apontando para a tabela 'users' do Supabase
         if (typeof _supabase !== 'undefined' && _supabase && typeof _supabase.from === 'function') {
