@@ -823,31 +823,53 @@ function cpTxt(t){navigator.clipboard.writeText(t).catch(function(){});}
 
 function swTab(t){G('tl').classList.toggle('on',t==='l');G('tr').classList.toggle('on',t==='r');G('fl').style.display=t==='l'?'block':'none';G('fr').style.display=t==='r'?'block':'none';if(t==='r')gerarCaptcha();}
 
-function doLogin() {
-    var tel = G('l-tel') ? G('l-tel').value.trim() : '';
-    var pw = G('l-pw') ? G('l-pw').value.trim() : '';
-    if (!tel || !pw) { toast('Preencha todos os campos', 'err'); return; }
-    var u = USERS.find(x => x.tel === tel && x.pw === pw);
-    if (!u) { toast('Dados incorretos', 'err'); return; }
-    if (u.bloqueado) { toast('Conta bloqueada', 'err'); return; }
-    U = u; salvarDados(); showApp(); toast('Bem-vindo!', 'ok');
+async function doLogin() {
+  try {
+    var tel = document.getElementById('loginTel') ? document.getElementById('loginTel').value.trim() : '';
+    var pin = document.getElementById('loginPin') ? document.getElementById('loginPin').value.trim() : '';
+    if (!tel || !pin) { alert('Preencha o telefone e o PIN!'); return; }
+    
+    const { data, error } = await _supabase.from('users').select('*').eq('tel', tel).eq('pin', pin).single();
+    if (error || !data) { alert('Telefone ou PIN incorretos!'); return; }
+    
+    window.U = data;
+    localStorage.setItem('U', JSON.stringify(window.U));
+    showApp();
+  } catch(e) {
+    alert('Erro no login: ' + e.message);
+  }
 }
 
-async function doReg() {
-    try {
-        var rn = G('r-n'), rt = G('r-t'), rp = G('r-p'), rc = G('r-c'), ca = G('captcha-ans');
-        var n = (rn && rn.value) ? rn.value.trim() : '';
-        var t = (rt && rt.value) ? rt.value.trim() : '';
-        var p = (rp && rp.value) ? rp.value.trim() : '';
-        var c = (rc && rc.value) ? rc.value.trim() : '';
-        var ans = (ca && ca.value) ? ca.value.trim().toUpperCase() : '';
+async function doRegister() {
+  try {
+    var nome = document.getElementById('regNome') ? document.getElementById('regNome').value.trim() : '';
+    var tel = document.getElementById('regTel') ? document.getElementById('regTel').value.trim() : '';
+    var pin = document.getElementById('regPin') ? document.getElementById('regPin').value.trim() : '';
+    var ref = document.getElementById('regRef') ? document.getElementById('regRef').value.trim() : '';
 
-        if (!n || !t || !p) { toast('Preencha os campos obrigatórios', 'err'); return; }
-        if (t.length < 9) { toast('Telefone inválido (mínimo 9 dígitos)', 'err'); return; }
+    if (!nome || !tel || !pin) { alert('Preencha Nome, Telefone e PIN!'); return; }
 
-        if (typeof _capCode !== 'undefined' && _capCode && ans !== String(_capCode).toUpperCase()) {
-            toast('Código Captcha incorreto', 'err'); return;
-        }
+    var newUser = {
+      nome: nome,
+      tel: tel,
+      pin: pin,
+      ref: ref,
+      saldo: 500,
+      ganhoTotal: 0,
+      ganhoHoje: 0,
+      planes: []
+    };
+
+    const { data, error } = await _supabase.from('users').insert([newUser]).select().single();
+    if (error) { alert('Erro no banco de dados: ' + error.message); return; }
+
+    window.U = data;
+    localStorage.setItem('U', JSON.stringify(window.U));
+    showApp();
+  } catch(e) {
+    alert('Erro ao registar: ' + e.message);
+  }
+}
 
         var meuCodigo = 'XTB-' + Math.floor(100000 + Math.random() * 900000);
 
