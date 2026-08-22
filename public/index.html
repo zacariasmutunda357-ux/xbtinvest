@@ -747,7 +747,12 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Inter',sans-serif;
   </div>
 </div>
 
-<script>var _capCode='';
+<script>
+  const SUPABASE_URL = 'https://yhdncwhnxfmglkhuiuao.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_wwOfp1ToqqHy1VphxNpTow_NTlTkPgJ';
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  var _capCode='';
 function gerarCaptcha(){
   var chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   _capCode='';
