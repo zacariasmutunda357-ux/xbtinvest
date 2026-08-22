@@ -758,7 +758,6 @@ window.addEventListener('load', function() {
         console.error("Erro ao inicializar o Supabase:", e);
     }
 });
-</script>
 
 
   var _capCode='';
@@ -778,6 +777,7 @@ function gerarCaptcha(){
   q.innerHTML=html;
   var a=G('captcha-ans');if(a)a.value='';
 }
+    
 // ES5 polyfills for old Android
 if(!Array.prototype.find){Array.prototype.find=function(fn){for(var i=0;i<this.length;i++){if(fn(this[i],i,this))return this[i];}return undefined;};}
 if(!Array.prototype.findIndex){Array.prototype.findIndex=function(fn){for(var i=0;i<this.length;i++){if(fn(this[i],i,this))return i;}return -1;};}
