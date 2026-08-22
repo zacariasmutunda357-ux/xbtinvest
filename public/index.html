@@ -748,9 +748,17 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Inter',sans-serif;
 </div>
 
 <script>
-  const SUPABASE_URL = 'https://yhdncwhnxfmglkhuiuao.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_wwOfp1ToqqHy1VphxNpTow_NTlTkPgJ';
-const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  window.addEventListener('load', function() {
+    try {
+        const SUPABASE_URL = 'https://yhdncwhnxfmglkhuiuao.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_wwOfp1ToqqHy1VphxNpTow_NTlTkPgJ';
+        window._supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        console.log("Supabase inicializado com sucesso!");
+    } catch (e) {
+        console.error("Erro ao inicializar o Supabase:", e);
+    }
+});
+
 
   var _capCode='';
 function gerarCaptcha(){
