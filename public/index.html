@@ -865,11 +865,27 @@ async function doReg() {
 function showApp() {
   if (!window.U) return;
 
-  // Proteção contra valores nulos/vazios vindos da base de dados
   if (!window.U.planes || !Array.isArray(window.U.planes)) window.U.planes = [];
   if (window.U.saldo === undefined || window.U.saldo === null) window.U.saldo = 500;
   if (window.U.ganhoTotal === undefined || window.U.ganhoTotal === null) window.U.ganhoTotal = 0;
   if (window.U.ganhoHoje === undefined || window.U.ganhoHoje === null) window.U.ganhoHoje = 0;
+
+  var authEl = document.getElementById('authScreen');
+  var appEl = document.getElementById('appScreen');
+  if (authEl) authEl.style.display = 'none';
+  if (appEl) appEl.style.display = 'block';
+
+  if (document.getElementById('uNome')) document.getElementById('uNome').innerText = window.U.nome || '---';
+  if (document.getElementById('uTel')) document.getElementById('uTel').innerText = window.U.tel || '---';
+  if (document.getElementById('uSaldo')) document.getElementById('uSaldo').innerText = window.U.saldo;
+  if (document.getElementById('uGanhoTotal')) document.getElementById('uGanhoTotal').innerText = window.U.ganhoTotal;
+  if (document.getElementById('uGanhoHoje')) document.getElementById('uGanhoHoje').innerText = window.U.ganhoHoje;
+
+  if (typeof renderPlanes === 'function') {
+    try { renderPlanes(); } catch(e) {}
+  }
+}
+
 
   // Forçar a troca de telas (esconde Login e mostra a Aplicação)
   var authEl = document.getElementById('authScreen');
